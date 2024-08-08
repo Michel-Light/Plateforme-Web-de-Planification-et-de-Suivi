@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('Poste_participant');
             $table->string('Telephone_participant');
             $table->string('Mot_de_passe')->nullable();
-            $table->integer('direction_id'); // Clé étrangère vers directions
+            $table->unsignedBigInteger('direction_id'); // Clé étrangère vers directions
             $table->foreign('direction_id')->references('id')->on('directions')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

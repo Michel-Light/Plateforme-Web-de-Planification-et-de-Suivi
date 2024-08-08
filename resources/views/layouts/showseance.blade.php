@@ -29,6 +29,46 @@
                     </div>
                 </div>
             </div>
+
+             <!-- Tableau des participants -->
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Liste des Participants</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <form action="" method="POST">
+                                @csrf
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Email</th>
+                                            <th>Poste</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($participants as $participant)
+                                            <tr>
+                                                <td><input type="checkbox" name="participants[]" value="{{ $participant->id }}"></td>
+                                                <td>{{ $participant->Nom }}</td>
+                                                <td>{{ $participant->Prenom }}</td>
+                                                <td>{{ $participant->Email }}</td>
+                                                <td>{{ $participant->Poste }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <button type="submit" class="btn btn-primary">Ajouter</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

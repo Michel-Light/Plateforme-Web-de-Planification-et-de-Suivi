@@ -47,8 +47,9 @@ class SeanceController extends Controller
     // Sauvegarder dans la base de données
     $seance->save();
 
-        // Rediriger vers la liste des séances avec un message de succès
-        return redirect()->route('seances.list')->with('success', 'Séance créée avec succès !');
+    // Rediriger vers la page des détails de la séance
+    return redirect()->route('seances.show', $seance->id)
+                     ->with('success', 'Séance créée avec succès !');
 
     }
 
@@ -101,5 +102,17 @@ public function show($id)
     return view('layouts.showseance', compact('seance'));
 }
 
+
+
+public function addParticipants(Request $request, $seanceId)
+{
+    $seance = Seance::findOrFail($seanceId);
+    $participantIds = $request->input('participants', []);
+
+    // Ajouter les participants sélectionnés à la séance
+    $seance->participants()->attach($participantIds);
+
+    return redirect()->route('seances.show', $seanceId)->with('success', 'Participants ajoutés avec succès à la séance !');
+}
 
 }

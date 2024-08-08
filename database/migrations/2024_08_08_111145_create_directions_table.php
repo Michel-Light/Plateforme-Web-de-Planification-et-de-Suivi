@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('participations', function (Blueprint $table) {
+        Schema::create('directions', function (Blueprint $table) {
             $table->id();
-            $table->string('Role_participant');
-            $table->boolean('Presence');
+            $table->unsignedBigInteger('institution_id'); // Clé étrangère vers institutions
             $table->timestamps();
+
+            // Définir la clé étrangère
+            $table->foreign('institution_id')->references('id')->on('institutions')->onDelete('cascade');
+
+
         });
     }
 
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('participations');
+        Schema::dropIfExists('directions');
     }
 };

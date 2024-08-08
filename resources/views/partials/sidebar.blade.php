@@ -19,12 +19,20 @@
                       <li><a href="media_gallery.html">Liste des Participants</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-table"></i> Statistiques <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-bank"></i>Institutions<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                      <li><a href="create">Ajouter Institution</a></li>
+                      <li><a href="institutions">Liste des Institutions</a></li>
+                    </ul>
                     <ul class="nav child_menu">
                       
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-bar-chart-o"></i> Parametrage <span class="fa fa-chevron-down"></span></a>
+                  <li><a ><i class="fa fa-navicon"></i>Directions<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="directions">Ajouter Direction</a></li>
+                      <li><a href="directions/list">Liste des Directions</a></li>
+                    </ul>
                     <ul class="nav child_menu">
                      
                     </ul>

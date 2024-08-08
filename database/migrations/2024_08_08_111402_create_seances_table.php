@@ -22,8 +22,16 @@ return new class extends Migration
             $table->longText('Rapport')->nullable()->change();
             $table->string('status_seance')->nullable()->change();
             $table->string('Lien_seance')->nullable();
+            $table->unsignedBigInteger('lieu_id')->nullable(); // Clé étrangère vers lieus
+            $table->unsignedBigInteger('seance_reportee_id')->nullable(); // Clé étrangère vers seances (pour les séances reportées)
 
             $table->timestamps();
+
+             // Définir les clés étrangères
+             $table->foreign('lieu_id')->references('id')->on('lieus')->onDelete('set null');
+             $table->foreign('seance_reportee_id')->references('id')->on('seances')->onDelete('set null');
+
+
         });
     }
 
