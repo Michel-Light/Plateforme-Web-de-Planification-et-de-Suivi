@@ -10,7 +10,7 @@ class InstitutionController extends Controller
 
     public function index()
     {
-        $institutions = Institution::all();
+        $institutions = Institution::with('directions')->get();
         return view('layouts.listInstitutions', compact('institutions'));
     }
 

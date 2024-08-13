@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SeanceNotification;
 use Illuminate\Http\Request;
 use App\Models\seance;
+use App\Models\Participant;
+use Illuminate\Support\Facades\Mail;
+
 
 class SeanceController extends Controller
 {
@@ -99,7 +103,9 @@ public function destroy($id)
 public function show($id)
 {
     $seance = Seance::findOrFail($id);
-    return view('layouts.showseance', compact('seance'));
+    $participants = Participant::all();
+
+    return view('layouts.showseance', compact('seance','participants'));
 }
 
 
@@ -112,7 +118,42 @@ public function addParticipants(Request $request, $seanceId)
     // Ajouter les participants sélectionnés à la séance
     $seance->participants()->attach($participantIds);
 
-    return redirect()->route('seances.show', $seanceId)->with('success', 'Participants ajoutés avec succès à la séance !');
+     // Récupérer les participants ajoutés
+     $participants = Participant::whereIn('id', $participantIds)->get();
+
+     // Envoyer l'e-mail à chaque participant
+     foreach ($participants as $participant) {
+        Mail::to($participant->Email_participant)
+            ->send(new SeanceNotification($seance));
+     }
+
+    return redirect()->route('seances.laseance', $seanceId)->with('success', 'Participants ajoutés avec succès à la séance !');
+}
+
+public function laseance($id)
+{
+    $seance = Seance::findOrFail($id);
+    $participantsAjoutes = $seance->participants; // Récupère les participants associés à la séance
+
+    return view('layouts.laseance', compact('seance', 'participantsAjoutes'));
+}
+
+
+public function removeParticipant($seanceId, $participantId)
+{
+    // Trouver la séance
+    $seance = Seance::find($seanceId);
+
+    // Vérifier si la séance existe
+    if (!$seance) {
+        return redirect()->route('seances.index')->with('error', 'Séance non trouvée');
+    }
+
+    // Retirer le participant de la séance
+    $seance->participants()->detach($participantId);
+
+    // Rediriger avec un message de succès
+    return redirect()->route('seances.laseance', $seanceId)->with('success', 'Participant retiré avec succès');
 }
 
 }

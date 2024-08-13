@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Participant;
+use App\Models\Direction;
 
 class ParticipantController extends Controller
 {
     public function list_participant()
     {
-        $participants = Participant::all(); // Récupère tous les participants
+        // Récupère tous les participants avec leurs directions associées
+        $participants = Participant::with('direction')->get();
         return view('layouts.listParticipants', compact('participants'));
     }
+    
 
     public function store(Request $request)
     {
@@ -23,8 +26,9 @@ class ParticipantController extends Controller
             'poste' => 'required|max:255',
             'telephone' => 'required|max:15',
             'mot_de_passe' => 'required|min:8',
+            'direction_id' => 'required|exists:directions,id',
         ]);
-
+    
         // Créer un nouveau participant
         $participant = new Participant();
         $participant->Nom_participant = $request->input('nom');
@@ -33,13 +37,15 @@ class ParticipantController extends Controller
         $participant->Poste_participant = $request->input('poste');
         $participant->Telephone_participant = $request->input('telephone');
         $participant->Mot_de_passe = bcrypt($request->input('mot_de_passe'));
-
+        $participant->direction_id = $request->input('direction_id'); // Associer la direction
+    
         // Sauvegarder dans la base de données
         $participant->save();
-
+    
         // Rediriger vers la liste des participants avec un message de succès
         return redirect()->route('participants.list')->with('success', 'Participant créé avec succès !');
     }
+    
 
     public function update(Request $request, $id)
     {
@@ -84,4 +90,11 @@ class ParticipantController extends Controller
         // Rediriger avec un message de succès
         return redirect()->route('participants.list')->with('success', 'Participant supprimé avec succès !');
     }
+
+    public function create()
+    {
+        $directions = Direction::all(); // Récupère toutes les directions
+        return view('layouts.createParticipants', compact('directions')); // Passe les directions à la vue
+    }
+    
 }

@@ -62,7 +62,15 @@
                                                 <tr>
                                                     <td>{{ $institution->Code_institution }}</td>
                                                     <td>{{ $institution->Nom_institution }}</td>
-                                                    <td>{{ $institution->direction_id}}</td>
+                                                    <td>
+                                                        @if($institution->directions->count())
+                                                            @foreach($institution->directions as $direction)
+                                                                <span>{{ $direction->Nom_direction }}@if(!$loop->last), @endif</span>
+                                                            @endforeach
+                                                        @else
+                                                            N/A
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <div style="display: flex;">
                                                             <a href="{{ route('institutions.edit', $institution->id) }}" class="btn btn-primary btn-sm mr-2">Modifier</a>
@@ -73,7 +81,6 @@
                                                             </form>
                                                         </div>
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         </tbody>

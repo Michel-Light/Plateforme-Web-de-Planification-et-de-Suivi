@@ -30,13 +30,11 @@ public function store(Request $request)
         'institution_id' => 'required|exists:institutions,id',
     ]);
 
-    Direction::create($request->all());
-    return redirect()->route('directions.index')->with('success', 'Direction créée avec succès.');
-
+   
     $direction = new Direction();
-        $direction->code_direction = $request->input('code_direction');
-        $direction->nom_direction = $request->input('nom_direction');
-        $direction->institution_id = $request->input('institution_id');
+        $direction->Code_direction = $request->input('code_direction');
+        $direction->Nom_direction = $request->input('nom_direction');
+        $direction->Institution_id = $request->input('institution_id');
 
         $direction->save();
 
@@ -59,9 +57,9 @@ public function store(Request $request)
         ]);
 
         $direction = Direction::findOrFail($id);
-        $direction->code_direction = $request->input('code_direction');
-        $direction->nom_direction = $request->input('nom_direction');
-        $direction->institution_id = $request->input('institution_id');
+        $direction->Code_direction = $request->input('code_direction');
+        $direction->Nom_direction = $request->input('nom_direction');
+        $direction->Institution_id = $request->input('institution_id');
 
         $direction->save();
 

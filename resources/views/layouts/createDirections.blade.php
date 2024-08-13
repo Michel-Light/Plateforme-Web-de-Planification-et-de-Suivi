@@ -25,6 +25,17 @@
                         <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="{{ route('directions.store') }}" method="POST">
                             @csrf
                             <div class="item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="institution_id">Institution<span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 ">
+                                    <select id="institution_id" name="institution_id" required="required" class="form-control">
+                                        <option value="">Sélectionnez une institution</option>
+                                        @foreach($institutions as $institution)
+                                            <option value="{{ $institution->id }}">{{ $institution->Nom_institution }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="code_direction">Code Direction<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 ">
                                     <input type="text" id="code_direction" name="code_direction" required="required" class="form-control">
@@ -34,17 +45,6 @@
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="nom_direction">Nom Direction<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 ">
                                     <input type="text" id="nom_direction" name="nom_direction" required="required" class="form-control">
-                                </div>
-                            </div>
-                            <div class="item form-group">
-                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="institution_id">Institution<span class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6 ">
-                                    <select id="institution_id" name="institution_id" required="required" class="form-control">
-                                        <option value="">Sélectionnez une institution</option>
-                                        @foreach($institutions as $institution)
-                                            <option value="{{ $institution->id }}">{{ $institution->Nom_institution }}</option>
-                                        @endforeach
-                                    </select>
                                 </div>
                             </div>
                             <div class="ln_solid"></div>

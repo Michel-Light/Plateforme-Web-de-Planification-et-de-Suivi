@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('participant_id'); // Clé étrangère vers participants
             $table->unsignedBigInteger('seance_id'); // Clé étrangère vers seances
-            $table->string('Role_participant');
-            $table->boolean('Presence');
+            $table->string('Role_participant')->default('participant simple');
+            $table->boolean('Presence')->nullable();
            
             $table->timestamps();
 

@@ -13,7 +13,7 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Nouveau Participant <small>different form elements</small></h2>
+                        <h2>Nouveau Participant <small>Formulaire de création</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             <li class="dropdown">
@@ -31,6 +31,17 @@
                         <br />
                         <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="{{ route('participants.store') }}" method="POST">
                             @csrf
+                            <div class="item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align">Direction <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 ">
+                                    <select id="direction_id" name="direction_id" class="form-control" required>
+                                        <option value="">Sélectionner une direction</option>
+                                        @foreach($directions as $direction)
+                                            <option value="{{ $direction->id }}">{{ $direction->Nom_direction }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <div class="item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="nom">Nom<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 ">
@@ -67,6 +78,7 @@
                                     <input id="mot_de_passe" name="mot_de_passe" class="form-control" type="password" required>
                                 </div>
                             </div>
+                            
                             <div class="ln_solid"></div>
                             <div class="item form-group">
                                 <div class="col-md-6 col-sm-6 offset-md-3">

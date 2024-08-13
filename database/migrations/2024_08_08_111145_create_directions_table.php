@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('directions', function (Blueprint $table) {
             $table->id();
+            $table->string('Code_direction');
+            $table->string('Nom_direction');
             $table->unsignedBigInteger('institution_id'); // Clé étrangère vers institutions
             $table->timestamps();
 

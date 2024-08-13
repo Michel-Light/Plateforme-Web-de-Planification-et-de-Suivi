@@ -31,7 +31,7 @@
                   <li><a ><i class="fa fa-navicon"></i>Directions<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="directions">Ajouter Direction</a></li>
-                      <li><a href="directions/list">Liste des Directions</a></li>
+                      <li><a href="direction">Liste des Directions</a></li>
                     </ul>
                     <ul class="nav child_menu">
                      
