@@ -23,7 +23,16 @@
                             <p><strong>Heure de Début :</strong> {{ $seance->Heure_debut }}</p>
                             <p><strong>Heure de Fin :</strong> {{ $seance->Heure_fin }}</p>
                             <p><strong>Type :</strong> {{ $seance->Type }}</p>
-                            <p><strong>Lien de Séance :</strong> <a href="{{ $seance->Lien_seance }}">{{ $seance->Lien_seance }}</a></p>
+                            @if($seance->Type == ' En ligne')
+                                <p><strong>Lien de Séance :</strong> <a href="{{ $seance->Lien_seance }}">{{ $seance->Lien_seance }}</a></p>
+                            @endif
+                            @if($seance->Type == 'presentiel')
+                                <p><strong>Lieu :</strong> <a href="{{ $seance->lieu }}">{{ $seance->lieu }}</a></p>
+                            @endif
+                            @if($seance->Type == 'mixte')
+                                <p><strong>Lieu :</strong> <a href="{{ $seance->lieu }}">{{ $seance->lieu }}</a></p
+                                <p><strong>Lien de Seance :</strong> <a href="{{ $seance->Lien_seance }}">{{ $seance->Lien_seance }}</a></p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -53,7 +62,10 @@
                                     <tbody>
                                         @foreach($participants as $participant)
                                             <tr>
-                                                <td><input type="checkbox" name="participants[]" value="{{ $participant->id }}"></td>
+                                                <td>
+                                                    <input type="checkbox" name="participants[]" value="{{ $participant->id }}"
+                                                           @if(in_array($participant->id, $participantsAjoutesIds)) checked @endif>
+                                                </td>
                                                 <td>{{ $participant->Nom_participant }}</td>
                                                 <td>{{ $participant->Prenom_participant }}</td>
                                                 <td>{{ $participant->Email_participant }}</td>

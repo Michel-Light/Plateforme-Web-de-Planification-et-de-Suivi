@@ -10,10 +10,20 @@ class DirectionController extends Controller
 {
 
 
-    public function index()
+    public function index(Request $request)
     {
         // Récupère toutes les directions avec leurs institutions associées
         $directions = Direction::with('institution')->get();
+        $search = $request->input('search');
+        
+        if ($search) {
+            $directions = Direction::where('Code_direction', 'like', "%{$search}%")
+                ->orWhere('Nom_direction', 'like', "%{$search}%")
+                ->with('institution') // Assurez-vous de charger l'institution associée
+                ->get();
+        } else {
+            $directions = Direction::with('institution')->get();
+        }
         return view('layouts.listDirections', compact('directions'));
     }
     public function create()
@@ -45,7 +55,7 @@ public function store(Request $request)
     {
         $direction = Direction::findOrFail($id);
         $institutions = Institution::all(); // Récupère toutes les institutions pour le menu déroulant
-        return view('layouts.editDirection', compact('direction', 'institutions'));
+        return view('layouts.editDirections', compact('direction', 'institutions'));
     }
 
     public function update(Request $request, $id)

@@ -7,14 +7,29 @@ use Illuminate\Http\Request;
 use App\Models\seance;
 use App\Models\Participant;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Lieu;
+
 
 
 class SeanceController extends Controller
 {
     //
-    public function list_seance()
+    public function list_seance(Request $request)
     {
         $seances = Seance::all(); // Récupère toutes les séances
+        $search = $request->input('search');
+        
+        if ($search) {
+            $seances = Seance::where('Titre', 'like', "%{$search}%")
+                             ->orWhere('Description', 'like', "%{$search}%")
+                             ->orWhere('Date', 'like', "%{$search}%")
+                             ->orWhere('Heure_debut', 'like', "%{$search}%")
+                             ->orWhere('Heure_fin', 'like', "%{$search}%")
+                             ->get();
+        } else {
+            $seances = Seance::all();
+        }
+
     return view('layouts.listseance', compact('seances'));
     }
 
@@ -102,33 +117,45 @@ public function destroy($id)
 
 public function show($id)
 {
-    $seance = Seance::findOrFail($id);
+    $seance = Seance::with('participants')->findOrFail($id);
+
+    // Récupérer les IDs des participants déjà ajoutés à cette séance
+    $participantsAjoutesIds = $seance->participants->pluck('id')->toArray();
+
+    // Récupérer tous les participants disponibles
     $participants = Participant::all();
 
-    return view('layouts.showseance', compact('seance','participants'));
+    return view('layouts.showseance', compact('seance', 'participants', 'participantsAjoutesIds'));
 }
+
+
 
 
 
 public function addParticipants(Request $request, $seanceId)
 {
     $seance = Seance::findOrFail($seanceId);
-    $participantIds = $request->input('participants', []);
+    $nouveauxParticipants = $request->input('participants', []);
+    
+    // Récupérer les participants déjà ajoutés
+    $participantsActuels = $seance->participants->pluck('id')->toArray();
+    
+    // Trouver les nouveaux participants à ajouter
+    $participantsAajouter = array_diff($nouveauxParticipants, $participantsActuels);
+    
+    // Ajouter les nouveaux participants
+    foreach ($participantsAajouter as $participantId) {
+        $seance->participants()->attach($participantId);
+        // Envoyer l'e-mail seulement aux nouveaux participants
+        $participant = Participant::find($participantId);
+        // Envoyer un e-mail au participant
+         Mail::to($participant->Email_participant)->send(new SeanceNotification($seance));
+    }
 
-    // Ajouter les participants sélectionnés à la séance
-    $seance->participants()->attach($participantIds);
-
-     // Récupérer les participants ajoutés
-     $participants = Participant::whereIn('id', $participantIds)->get();
-
-     // Envoyer l'e-mail à chaque participant
-     foreach ($participants as $participant) {
-        Mail::to($participant->Email_participant)
-            ->send(new SeanceNotification($seance));
-     }
-
-    return redirect()->route('seances.laseance', $seanceId)->with('success', 'Participants ajoutés avec succès à la séance !');
+    return redirect()->route('seances.laseance', $seanceId)
+        ->with('success', 'Les participants ont été ajoutés avec succès.');
 }
+
 
 public function laseance($id)
 {

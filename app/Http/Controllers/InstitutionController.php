@@ -8,9 +8,19 @@ use App\Models\Institution;
 class InstitutionController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $institutions = Institution::with('directions')->get();
+        $search = $request->input('search');
+        
+        if ($search) {
+            $institutions = Institution::where('Code_institution', 'like', "%{$search}%")
+                ->orWhere('Nom_institution', 'like', "%{$search}%")
+                ->with('directions') // Assurez-vous de charger les directions associées
+                ->get();
+        } else {
+            $institutions = Institution::with('directions')->get();
+        }
         return view('layouts.listInstitutions', compact('institutions'));
     }
 

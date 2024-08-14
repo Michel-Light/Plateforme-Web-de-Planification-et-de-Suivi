@@ -8,10 +8,25 @@ use App\Models\Direction;
 
 class ParticipantController extends Controller
 {
-    public function list_participant()
+    public function list_participant(Request $request)
     {
         // Récupère tous les participants avec leurs directions associées
         $participants = Participant::with('direction')->get();
+        $search = $request->input('search');
+        
+        if ($search) {
+            $participants = Participant::where('Nom_participant', 'like', "%{$search}%")
+                ->orWhere('Prenom_participant', 'like', "%{$search}%")
+                ->orWhere('Email_participant', 'like', "%{$search}%")
+                ->orWhere('Poste_participant', 'like', "%{$search}%")
+                ->orWhere('Telephone_participant', 'like', "%{$search}%")
+                ->orWhereHas('direction', function ($query) use ($search) {
+                    $query->where('Nom_direction', 'like', "%{$search}%");
+                })
+                ->get();
+        } else {
+            $participants = Participant::all();
+        }
         return view('layouts.listParticipants', compact('participants'));
     }
     

@@ -61,6 +61,9 @@ Route::get('/institutions/{id}/edit', [InstitutionController::class, 'edit'])->n
 
 Route::delete('/institutions/{id}', [InstitutionController::class, 'destroy'])->name('institutions.destroy');
 
+Route::resource('institutions', InstitutionController::class);
+
+
 
 // Routes Directions
 
@@ -76,6 +79,9 @@ Route::get('/directions/{id}/edit', [DirectionController::class, 'edit'])->name(
 Route::get('direction', [DirectionController::class, 'index'])->name('directions.index');
 
 Route::delete('/directions/{id}', [DirectionController::class, 'destroy'])->name('directions.destroy');
+
+Route::put('/directions/{id}', [DirectionController::class, 'update'])->name('directions.update');
+
 
 // Routes Participants
 

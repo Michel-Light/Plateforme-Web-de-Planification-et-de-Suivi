@@ -16,7 +16,6 @@
                         <h2>Nouvelle Direction</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a></li>
                         </ul>
                         <div class="clearfix"></div>
                     </div>
@@ -50,7 +49,7 @@
                             <div class="ln_solid"></div>
                             <div class="item form-group">
                                 <div class="col-md-6 col-sm-6 offset-md-3">
-                                    <button type="submit" class="btn btn-success">Créer</button>
+                                    <button type="submit" class="btn btn-primary">Créer</button>
                                 </div>
                             </div>
                         </form>

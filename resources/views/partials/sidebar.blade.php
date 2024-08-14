@@ -33,6 +33,12 @@
                       <li><a href="directions">Ajouter Direction</a></li>
                       <li><a href="direction">Liste des Directions</a></li>
                     </ul>
+                    <li><a><i class="fa fa-user"></i> Comptes Organisateurs <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="form.html">Creer Compte Organisateur</a></li>
+                      <li><a href="listseance.html">Liste Comptes Organisateurs</a></li>
+                    </ul>
+                  </li>
                     <ul class="nav child_menu">
                      
                     </ul>
