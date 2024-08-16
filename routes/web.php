@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Lieu;
+use App\Models\Participant;
+use App\Models\Seance;
 use App\Http\Controllers\DirectionController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\SeanceController;
 use App\Http\Controllers\LieuController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\CompteOrganisateursController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +23,8 @@ use App\Http\Controllers\ParticipantController;
 */
 
 Route::get('/form.html', function () {
-    return view('layouts.seance');
+    $lieux = lieu::all();
+    return view('layouts.seance',['lieux'=> $lieux]);
 });
 
 
@@ -93,5 +98,9 @@ Route::post('/participants', [ParticipantController::class, 'store'])->name('par
 
 Route::post('/lieu/store', [LieuController::class, 'store'])->name('lieu.store');
 
+Route::get('creating', [CompteOrganisateursController::class, 'create'])->name('compteOrganisateurs.create');
 
+// Route pour stocker un nouveau compte organisateur
+Route::post('compte-organisateurs', [CompteOrganisateursController::class, 'store'])->name('compteOrganisateurs.store');
 
+Route::resource('compteOrganisateurs', CompteOrganisateursController::class);

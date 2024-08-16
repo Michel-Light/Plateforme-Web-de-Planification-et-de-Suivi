@@ -73,12 +73,15 @@
                                 <label class="col-form-label col-md-3 col-sm-3 label-align">Lieu</label>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="input-group">
-                                        <select class="form-control" name="lieu_id" id="lieu_select">
-                                            <!-- Options de lieu seront ajoutées ici -->
-                                        </select>
+                                       
+                                            <select class="form-control" name="lieu_id" id="lieu_select">
+                                             @foreach($lieux as $lieu)
+                                                <Option value="{{$lieu ->id}}">{{$lieu ->Libelle_lieu}}</Option>
+                                            @endforeach
+                                            </select>
+                                        
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ajoutLieuModal">+</button>
-                                    
                                         </div>
                                     </div>
                                 </div>
@@ -106,85 +109,34 @@
 </div>
 
 <!-- Modal pour l'ajout d'un nouveau lieu -->
-                            <div class="modal fade" id="ajoutLieuModal" tabindex="-1" role="dialog" aria-labelledby="ajoutLieuModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="ajoutLieuModalLabel">Ajouter un nouveau lieu</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="ajoutLieuForm">
-                                                @csrf
-                                                <div class="form-group">
-                                                    <label for="code_lieu">Code Lieu</label>
-                                                    <input type="text" class="form-control" id="code_lieu" name="code_lieu" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="libelle_lieu">Libelle Lieu</label>
-                                                    <input type="text" class="form-control" id="libelle_lieu" name="libelle_lieu" required>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Enregistrer</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<div class="modal fade" id="ajoutLieuModal" tabindex="-1" role="dialog" aria-labelledby="ajoutLieuModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ajoutLieuModalLabel">Ajouter un nouveau lieu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="ajoutLieuForm">
+                    <div class="form-group">
+                        <label for="Code_lieu">Code Lieu</label>
+                        <input type="text" class="form-control" id="Code_lieu" name="Code_lieu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Libelle_lieu">Libelle Lieu</label>
+                        <input type="text" class="form-control" id="Libelle_lieu" name="Libelle_lieu" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script>
+<script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-        const seanceForm = document.getElementById('seanceForm');
-        const ajoutLieuForm = document.getElementById('ajoutLieuForm');
-
-        // Envoi du formulaire d'ajout de lieu via AJAX
-        ajoutLieuForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(ajoutLieuForm);
-
-    fetch('{{ route("lieu.store") }}', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-        },
-        body: formData
-    })
-    .then(response => {
-        // Vérifier si la réponse est OK (code HTTP 200-299)
-        if (!response.ok) {
-            throw new Error('Erreur réseau : ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Ajouter le nouveau lieu au select
-            const lieuSelect = document.getElementById('lieu_select');
-            const newOption = document.createElement('option');
-            newOption.value = data.lieu.id;
-            newOption.text = data.lieu.libelle_lieu;
-            lieuSelect.appendChild(newOption);
-
-            // Sélectionner automatiquement le nouveau lieu
-            lieuSelect.value = data.lieu.id;
-
-            // Fermer le modal
-            $('#ajoutLieuModal').modal('hide');
-        } else {
-            // Gérer les erreurs côté serveur
-            alert('Erreur lors de l\'ajout du lieu');
-        }
-    })
-    .catch(error => {
-        // Afficher une alerte avec les détails de l'erreur
-        console.error('Erreur:', error);
-        alert('Une erreur est survenue : ' + error.message);
-    });
-});
-
-
         // Script pour afficher les champs selon le type de séance
         const typeInputs = document.querySelectorAll('input[name="type"]');
         const lieuField = document.getElementById('lieu_field');
@@ -208,6 +160,41 @@
         });
 
         updateFields();
+    });
+
+    function sendLieu() {
+        var lieu = {
+            Code_lieu: $("#Code_lieu").val(),  // Utilisez 'code_lieu' ici
+            Libelle_lieu: $("#Libelle_lieu").val(),  
+        }
+
+        $('#ajoutLieuModal').modal('hide'); // Fermer le modal
+
+        $.ajax({
+            url: '{{ route('lieu.store') }}',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: JSON.stringify(lieu),
+            success: function (data) {
+                alert('Lieu ajouté avec succès');
+                // Mettre à jour la liste des lieux dans le select
+                var newOption = new Option(data.lieu.Libelle_lieu, data.lieu.id, false, false);
+                $('#lieu_select').append(newOption).trigger('change');
+            },
+            error: function (xhr, status, error) {
+                alert('Erreur lors de l\'ajout du lieu : ' + error);
+            }
+        });
+    }
+
+    // Attacher l'événement au bouton d'enregistrement du modal
+    $('#ajoutLieuForm').on('submit', function (e) {
+        e.preventDefault(); // Empêcher le rechargement de la page
+        sendLieu();
     });
 </script>
 @endsection

@@ -35,8 +35,8 @@
                     </ul>
                     <li><a><i class="fa fa-user"></i> Comptes Organisateurs <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="form.html">Creer Compte Organisateur</a></li>
-                      <li><a href="listseance.html">Liste Comptes Organisateurs</a></li>
+                      <li><a href="creating">Creer Compte Organisateur</a></li>
+                      <li><a href="compteOrganisateurs">Liste Comptes Organisateurs</a></li>
                     </ul>
                   </li>
                     <ul class="nav child_menu">

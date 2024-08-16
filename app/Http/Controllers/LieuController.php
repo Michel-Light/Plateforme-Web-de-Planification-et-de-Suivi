@@ -26,7 +26,7 @@ class LieuController extends Controller
        // Retourner une réponse JSON
        return response()->json([
            'success' => true,
-           'lieu' => $lieu
+           'lieu' => $lieu,
        ]);
    }
 
